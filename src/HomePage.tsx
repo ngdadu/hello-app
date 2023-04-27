@@ -24,9 +24,16 @@ const HomePage = () => {
               color="primary"
               size="large"
               href="/fire"
-              target="_blank"
             >
               Fireworks
+            </Button>
+            <Button
+              variant="contained" 
+              color="primary"
+              size="large"
+              href="/map"
+            >
+              OpenStreet Map
             </Button>
           </div>
         </header>
