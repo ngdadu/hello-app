@@ -5,6 +5,7 @@ import L from "leaflet";
 import PinSvg from "./mappin.svg"
 import { Chip } from "@mui/material";
 
+var staticMap: L.Map;
 export default function OSMap() {
     const markerIcon = L.icon({
         iconUrl: PinSvg,
@@ -14,6 +15,38 @@ export default function OSMap() {
     const defaultZoom: number = 16;
     const defaultLocation = {lat: 52.51629936526891, lng: 13.377686483224936} // Brandenburger Tor, Berlin
 
+    function setDefaultLocation() {
+        if (!staticMap) return;
+        staticMap.flyTo(defaultLocation, defaultZoom);
+    }
+
+    function setMyLocation() {
+        if (!staticMap) return;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                staticMap.flyTo({lat: position.coords.latitude, lng: position.coords.longitude}, defaultZoom);
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+    }
+
+    function fitAllLocations() {
+        if (!staticMap) return;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const pos = {lat: position.coords.latitude, lng: position.coords.longitude};
+                staticMap.flyTo(pos, staticMap.getZoom());
+                var bounds = L.latLngBounds([defaultLocation, pos]); // Instantiate LatLngBounds object
+                staticMap.fitBounds(bounds, {animate: true});
+                },
+            (error) => {
+                console.log(error);
+            }
+        );
+    }
+
     //a local component
     function LocationMarker() 
     {
@@ -21,6 +54,7 @@ export default function OSMap() {
         const [bbox, setBbox] = useState([""]);
 
         const map = useMap();
+        staticMap = map;
 
         useEffect(() => {
         map.locate().on("locationfound", function (e) {
@@ -59,6 +93,24 @@ export default function OSMap() {
             style={{margin: "10px"}} 
             clickable={true} 
             onClick={ () => {window.location.href = "/"} } 
+        />
+        <Chip label="Default Location" 
+            color="primary"
+            style={{margin: "10px"}} 
+            clickable={true} 
+            onClick={ () => setDefaultLocation() } 
+        />
+        <Chip label="My Location" 
+            color="primary"
+            style={{margin: "10px"}} 
+            clickable={true} 
+            onClick={ () => setMyLocation() } 
+        />
+        <Chip label="Fit All" 
+            color="primary"
+            style={{margin: "10px"}} 
+            clickable={true} 
+            onClick={ () => fitAllLocations() } 
         />
         <MapContainer
             center={defaultLocation}
