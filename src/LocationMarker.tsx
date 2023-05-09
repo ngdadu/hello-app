@@ -5,7 +5,7 @@ import L from "leaflet";
 //a local component
 export default function LocationMarker(props: {
     defaultLocation: L.LatLngExpression,
-    setStaticMap: any,
+    setStaticMap: (m: L.Map) => void,
     markerIcon: L.Icon
     }) 
 {
