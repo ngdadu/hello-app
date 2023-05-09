@@ -36,10 +36,10 @@ export default function LocationMarker(props: {
     <Marker position={position} icon={props.markerIcon}>
         <Popup>
         You are here. <hr />
-        <b>Southwest lng</b>: {bbox[0]} <br />
-        <b>Southwest lat</b>: {bbox[1]} <br />
-        <b>Northeast lng</b>: {bbox[2]} <br />
-        <b>Northeast lat</b>: {bbox[3]}
+        <table>
+            <tr><td>LAT:LON</td><td>{bbox[3]} : {bbox[2]}</td></tr>
+            <tr><td>{bbox[1]} : {bbox[0]}</td><td>LAT:LON</td></tr>
+        </table>
         </Popup>
     </Marker>
     );
